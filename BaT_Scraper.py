@@ -21,7 +21,7 @@ processed_titles = set()  # Track titles to avoid re-adding
 iteration = 0
 while True:
     # Wait a bit for the content to load
-    time.sleep(2)
+    time.sleep(10)
 
     # Refresh the list of 'content-main' divs after each 'Show More' click
     content_main_divs = driver.find_elements(By.CLASS_NAME, 'content-main')
@@ -41,11 +41,16 @@ while True:
                 EC.presence_of_element_located((By.CLASS_NAME, 'item-results'))
             )
             result = result_element.text.strip()
-
+            
+            excerpt_element = WebDriverWait(div, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "item-excerpt"))
+            )
+            auction_excerpt = excerpt_element.get_attribute('innerHTML').strip()
+#             print(f"EXCERPT:", auction_excerpt)
             # Append the title and result to the list if it's not already processed
-            if title not in processed_titles:
+            if auction_excerpt not in processed_excerpts:
                 auctions.append({'title': title, 'result': result})
-                processed_titles.add(title)  # Mark this title as processed
+                processed_excerpts.add(auction_excerpt)  # Mark this title as processed
                 print(f"Added auction: {title} - {result}")
 
         except Exception as e:
