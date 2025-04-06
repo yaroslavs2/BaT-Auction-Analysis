@@ -84,4 +84,19 @@ driver.quit()
 
 print("Total auctions scraped:", len(auctions))
 
+df = pd.DataFrame(auctions)
+
+price_pattern = r"(?:Sold for|Bid to) \$(\d{1,3}(?:,\d{3})*)"
+date_pattern = r"on (\d{1,2}/\d{1,2}/\d{2})"
+
+# Extract sale price and date
+df["sale_price"] = df["result"].str.extract(price_pattern)[0]
+df["sale_date"] = df["result"].str.extract(date_pattern)[0]
+
+# Convert the sale price to a numeric column and remove commas
+df["sale_price"] = df["sale_price"].str.replace(",", "").astype(float)
+
+# Convert the sale date to a datetime object
+df["sale_date"] = pd.to_datetime(df["sale_date"], format="%m/%d/%y", errors="coerce")
+
 
