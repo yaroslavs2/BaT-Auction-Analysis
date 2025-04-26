@@ -86,7 +86,7 @@ print("Total auctions scraped:", len(auctions))
 
 df = pd.DataFrame(auctions)
 
-price_pattern = r"(?:Sold for|Bid to) \$(\d{1,3}(?:,\d{3})*)"
+price_pattern = r"(?:Sold for USD|Bid to USD) \$(\d{1,3}(?:,\d{3})*)"
 date_pattern = r"on (\d{1,2}/\d{1,2}/\d{2})"
 
 # Extract sale price and date
